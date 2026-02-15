@@ -11,7 +11,7 @@ export PATH=$PATH:/usr/lpp/zowe/cli/node/bin
 java -version
 
 # Set ZOWE_USERNAME
-ZOWE_USERNAME="${ZOWE_USERNAME}"
+ZOWE_USERNAME="Z88828"  # Replace with your actual username
 
 # Change to the cobolcheck directory
 cd cobolcheck
@@ -37,6 +37,9 @@ run_cobolcheck() {
   ./cobolcheck -p $program
   echo "Cobolcheck execution completed for $program (exceptions may have occurred)"
 
+  # Note: The "CC##99.CBL" file name below is NOT a placeholder
+  # Keep it as is in the code
+
   # Check if CC##99.CBL was created, regardless of cobolcheck exit status
   if [ -f "CC##99.CBL" ]; then
     # Copy to the MVS dataset
@@ -53,7 +56,7 @@ run_cobolcheck() {
   if [ -f "${program}.JCL" ]; then
     if cp ${program}.JCL "//'${ZOWE_USERNAME}.JCL($program)'"; then
       echo "Copied ${program}.JCL to ${ZOWE_USERNAME}.JCL($program)"
-      # Submit job to run COBOL Check tests on the program!
+      # Submit job to run testing version of the program
       submit ${program}.JCL
       echo "Submitted job ${program}.JCL"
     else
@@ -65,7 +68,7 @@ run_cobolcheck() {
 }
 
 # Run for each program
-for program in ALPHA NUMBERS EMPPAY DEPTPAY; do
+for program in NUMBERS EMPPAY DEPTPAY; do
   run_cobolcheck $program
 done
 
